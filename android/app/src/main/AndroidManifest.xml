@@ -1,4 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- In the permission part of your manifest, these permission are needed if you target Android 14 phones -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" /> <!-- Here, chose the type according to your app -->
+
+    <!-- Add android:stopWithTask option only when necessary. -->
+    <service
+        android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
+        android:stopWithTask="true"
+        android:foregroundServiceType="mediaPlayback"
+    android:exported="false" />
+
     <application
         android:label="sample_http_server"
         android:name="${applicationName}"
@@ -29,6 +41,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <service android:name=".services.MyForegroundService" />
+
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and
