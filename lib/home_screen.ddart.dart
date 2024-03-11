@@ -5,7 +5,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,12 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? mobileIP;
 
-
-
-  // TODO GETTING MOBILE IP ADDRESS
-  mobileIpAddress() async {
+  // Method to get the mobile IP address
+  void getMobileIpAddress() async {
     try {
-      for (var interface in await NetworkInterface.list()) {
+      final interfaces = await NetworkInterface.list();
+      for (var interface in interfaces) {
         for (var addr in interface.addresses) {
           if (addr.type == InternetAddressType.IPv4 && !addr.isLoopback) {
             setState(() {
@@ -31,14 +30,16 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       print('Failed to get IP address: $e');
+      setState(() {
+        mobileIP = 'Error occurred: $e';
+      });
     }
   }
 
   @override
   void initState() {
     super.initState();
-    // serverApi();
-    mobileIpAddress();
+    getMobileIpAddress();
   }
 
   @override
