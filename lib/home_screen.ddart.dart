@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart' as shelf_io;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -61,19 +58,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               title: mobileIP != null
                   ? Text(
-                mobileIP!,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700),
-              )
+                      mobileIP!,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w700),
+                    )
                   : const Text(
-                "IP is null",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700),
-              ),
+                      "IP is null",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w700),
+                    ),
             ),
           ),
         ],

@@ -4,10 +4,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
@@ -32,12 +30,12 @@ Future<void> initializeService() async {
   }
 }
 
-
 Future<void> serverApi() async {
   Response handler(Request request) {
     if (request.url.path == 'hello') {
       var jsonResponse = jsonEncode({'msg': 'Hello, World!'});
-      return Response.ok(jsonResponse, headers: {'content-type': 'application/json'});
+      return Response.ok(jsonResponse,
+          headers: {'content-type': 'application/json'});
     }
     return Response.notFound('Not Found');
   }
@@ -48,7 +46,6 @@ Future<void> serverApi() async {
   print("Server is running $server");
 }
 
-
 @pragma('vm:entry-point')
 Future<bool> onIosBackground(ServiceInstance serviceInstance) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,13 +55,11 @@ Future<bool> onIosBackground(ServiceInstance serviceInstance) async {
 
 Future<void> onStart(ServiceInstance serviceInstance) async {
   DartPluginRegistrant.ensureInitialized();
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   await serverApi();
 
   if (serviceInstance is AndroidServiceInstance) {
     serviceInstance.on('setAsForeground').listen((event) {
       serviceInstance.setAsForegroundService();
-      _showForegroundNotification(flutterLocalNotificationsPlugin);
     });
 
     serviceInstance.on('setAsBackground').listen((event) {
@@ -74,30 +69,5 @@ Future<void> onStart(ServiceInstance serviceInstance) async {
     serviceInstance.on('stopService').listen((event) {
       serviceInstance.stopSelf();
     });
-
-    Timer.periodic(const Duration(minutes: 1), (timer) {
-      _showForegroundNotification(flutterLocalNotificationsPlugin);
-    });
   }
 }
-
-void _showForegroundNotification(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
-  print("Shakeeb is doing");
-  AndroidNotificationDetails androidNotificationDetails =
-  const AndroidNotificationDetails(
-    'channelId',
-    'channelName',
-    importance: Importance.max,
-    priority: Priority.high,
-    icon: '@mipmap/ic_launcher',
-  );
-  NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidNotificationDetails);
-
-  flutterLocalNotificationsPlugin.show(
-    0,
-    'Foreground Service',
-    'Running in the background',
-    platformChannelSpecifics,
-  );
-}
-
