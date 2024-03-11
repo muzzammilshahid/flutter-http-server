@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final interfaces = await NetworkInterface.list();
       for (var interface in interfaces) {
         for (var addr in interface.addresses) {
-          if (addr.type == InternetAddressType.IPv4 && !addr.isLoopback) {
+          if (addr.type == InternetAddressType.IPv4 && !addr.isLoopback && addr.address.contains('192.168.')) {
             setState(() {
               mobileIP = addr.address;
               print('Mobile IP Address: ${addr.address}');
