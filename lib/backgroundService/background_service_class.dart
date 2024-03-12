@@ -53,6 +53,7 @@ Future<bool> onIosBackground(ServiceInstance serviceInstance) async {
   return true;
 }
 
+@pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance serviceInstance) async {
   DartPluginRegistrant.ensureInitialized();
   await serverApi();
